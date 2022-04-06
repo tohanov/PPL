@@ -1,0 +1,16 @@
+*
+
+!Part 1.pdf
+!Part 1.docx
+!src
+!src/**
+
+!test
+!test/**
+
+!.gitignore
+!package.json
+!tsconfig.json
+!zipCommands.sh
+
+
