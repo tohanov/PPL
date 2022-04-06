@@ -1,4 +1,4 @@
-import { /*countLetters, isPaired, */treeToSentence, WordTree } from "../../src/part2/part2";
+import { countLetters, isPaired, treeToSentence, WordTree } from "../../src/part2/part2";
 
 describe("Assignment 1 Part 2", () => {
     describe("countLetters", () => {
