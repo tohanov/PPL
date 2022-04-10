@@ -1,0 +1,14 @@
+*
+
+!src
+!src/**
+
+!test
+!test/**
+
+!.gitignore
+!package.json
+!tsconfig.json
+!zipCommands.sh
+
+
