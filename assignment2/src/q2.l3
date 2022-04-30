@@ -1,100 +1,143 @@
 (define make-ok
-  (lambda (val)
-    (cons 'ok val)
-  )
- )
- 
+	(lambda (val)
+		(cons 'ok val)
+	)
+)
+
 
 (define make-error
-  (lambda (msg)
-    (cons 'error msg)
-  )
- )
+	(lambda (msg)
+		(cons 'error msg)
+	)
+)
 
 
 (define ok?
-  (lambda (res)
-    (cond 	((not (pair? res)) #f)
-			((equal? (car res) 'ok) #t)
-			(else #f)
+	(lambda (res)
+		(if	(pair? res) (eq? (car res) 'ok) #f)
 	)
-  )
- )
+)
 
 
 (define error?
-  (lambda (res)
-    (cond 	((not (pair? res)) #f)
-			((equal? (car res) 'error) #t)
-			(else #f)
+	(lambda (res)
+		(if	(pair? res) (eq? (car res) 'error) #f)
 	)
-  )
- )
+)
 
 
 (define result?
-  (lambda (res)
+	(lambda (res)
 		(or (ok? res) (error? res))
-  )
- )
+	)
+)
 
 
 (define result->val
-  (lambda (res)
-	(cdr res)
-  )
+	(lambda (res)
+		(cdr res)
+	)
 )
 
 
 (define bind 
-  (lambda (f)
+	(lambda (f)
 		(lambda (res)
-			(cond	((not (result? res)) make-error "Unexpected type of 'res'")
-					((error? res) res)
-					(else (f (result->val res)))
+			(if (not (result? res)) 
+				(make-error "Unexpected type of 'res'")
+
+				(if (error? res) 
+					res
+					(f (result->val res))
+				)
 			)
 		)
-  )
+	)
 )
 
 
 (define make-dict
-  (lambda ()
-    @TODO
-  )
+	(lambda ()
+		'()
+	)
 )
 
 
 (define dict?
-  (lambda (e)
-    @TODO
-  )
+	(lambda (e)
+		(or	(empty? e)
+
+			(if	(not (pair? e))
+				#f
+				
+				(if (not (pair? (car e)))
+					#f
+
+					(dict? (cdr e))
+				)
+			)
+		)
+	)
+)
+
+
+(define get-iter
+	(lambda (dict k)
+		(if (empty? dict) 
+			(make-error "Key not found")
+			
+			(if (eq? (car (car dict)) k) 
+				(make-ok (cdr (car dict)))
+				(get-iter (cdr dict) k)
+			)
+		)
+	)
 )
 
 
 (define get
-  (lambda (dict k)
-    @TODO
-  )
+	(lambda (dict k)
+		(if (dict? dict)
+			(get-iter dict k)
+			(make-error "Error: not a dictionary")
+		)
+	)
+)
+
+
+(define put-iter
+	(lambda (dict k v)
+		(if (empty? dict)
+			(cons (cons k v) dict)
+
+			(if (eq? (car (car dict)) k) 
+				(cons (cons k v) (cdr dict))
+				(cons (cons k v) (get-iter (cdr dict) k))
+			)
+		)
+	)
 )
 
 
 (define put
-  (lambda (dict k v)
-    @TODO
-  )
+	(lambda (dict k v)
+		(if (dict? dict)
+			(make-ok (put-iter dict k v))
+			(make-error "Error: not a dictionary")
+		)
+	)
 )
 
 
 (define map-dict
-  (lambda (dict f)
-    @TODO
-  )
+	(lambda (dict f)
+		@TODO
+	)
 )
 
 
 (define filter-dict
-  (lambda (dict pred)
-    @TODO
-  )
+	(lambda (dict pred)
+		@TODO
+	)
 )
