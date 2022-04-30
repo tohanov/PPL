@@ -112,7 +112,7 @@
 
 			(if (eq? (car (car dict)) k) 
 				(cons (cons k v) (cdr dict))
-				(cons (cons k v) (get-iter (cdr dict) k))
+				(cons (car dict) (put-iter (cdr dict) k v))
 			)
 		)
 	)
@@ -129,9 +129,29 @@
 )
 
 
+(define map-dict-iter
+	(lambda (dict f)
+		(if (empty? dict)
+			dict
+			
+			(cons 
+				(cons 
+					(car (car dict)) 
+					(f (cdr (car dict)))
+				)
+				(map-dict-iter (cdr dict) f)
+			)
+		)
+	)
+)
+
+
 (define map-dict
 	(lambda (dict f)
-		@TODO
+		(if (dict? dict)
+			(make-ok (map-dict-iter dict f))
+			(make-error "Error: not a dictionary")
+		)
 	)
 )
 
