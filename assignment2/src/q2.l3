@@ -4,11 +4,13 @@
   )
  )
  
+
 (define make-error
   (lambda (msg)
     (cons 'error msg)
   )
  )
+
 
 (define ok?
   (lambda (res)
@@ -19,6 +21,7 @@
   )
  )
 
+
 (define error?
   (lambda (res)
     (cond 	((not (pair? res)) #f)
@@ -28,11 +31,13 @@
   )
  )
 
+
 (define result?
   (lambda (res)
-    (or (ok? res) (error? res))
+		(or (ok? res) (error? res))
   )
  )
+
 
 (define result->val
   (lambda (res)
@@ -40,11 +45,18 @@
   )
 )
 
+
 (define bind 
   (lambda (f)
-    @TODO
+		(lambda (res)
+			(cond	((not (result? res)) make-error "Unexpected type of 'res'")
+					((error? res) res)
+					(else (f (result->val res)))
+			)
+		)
   )
 )
+
 
 (define make-dict
   (lambda ()
@@ -52,11 +64,13 @@
   )
 )
 
+
 (define dict?
   (lambda (e)
     @TODO
   )
 )
+
 
 (define get
   (lambda (dict k)
@@ -64,17 +78,20 @@
   )
 )
 
+
 (define put
   (lambda (dict k v)
     @TODO
   )
 )
 
+
 (define map-dict
   (lambda (dict f)
     @TODO
   )
 )
+
 
 (define filter-dict
   (lambda (dict pred)
