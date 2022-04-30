@@ -81,13 +81,27 @@
 )
 
 
+(define caar 
+	(lambda (pair)
+		(car (car pair))
+	)
+)
+
+
+(define cadr 
+	(lambda (pair)
+		(cdr (car pair))
+	)
+)
+
+
 (define get-iter
 	(lambda (dict k)
 		(if (empty? dict) 
 			(make-error "Key not found")
 			
-			(if (eq? (car (car dict)) k) 
-				(make-ok (cdr (car dict)))
+			(if (eq? (caar dict) k) 
+				(make-ok (cadr dict))
 				(get-iter (cdr dict) k)
 			)
 		)
@@ -97,9 +111,9 @@
 
 (define get
 	(lambda (dict k)
-		(if (dict? dict)
-			(get-iter dict k)
+		(if (not (dict? dict))
 			(make-error "Error: not a dictionary")
+			(get-iter dict k)
 		)
 	)
 )
@@ -110,7 +124,7 @@
 		(if (empty? dict)
 			(cons (cons k v) dict)
 
-			(if (eq? (car (car dict)) k) 
+			(if (eq? (caar dict) k) 
 				(cons (cons k v) (cdr dict))
 				(cons (car dict) (put-iter (cdr dict) k v))
 			)
@@ -121,9 +135,9 @@
 
 (define put
 	(lambda (dict k v)
-		(if (dict? dict)
-			(make-ok (put-iter dict k v))
+		(if (not (dict? dict))
 			(make-error "Error: not a dictionary")
+			(make-ok (put-iter dict k v))
 		)
 	)
 )
@@ -136,8 +150,8 @@
 			
 			(cons 
 				(cons 
-					(car (car dict)) 
-					(f (cdr (car dict)))
+					(caar dict) 
+					(f (cadr dict))
 				)
 				(map-dict-iter (cdr dict) f)
 			)
@@ -148,9 +162,23 @@
 
 (define map-dict
 	(lambda (dict f)
-		(if (dict? dict)
-			(make-ok (map-dict-iter dict f))
+		(if (not (dict? dict))
 			(make-error "Error: not a dictionary")
+			(make-ok (map-dict-iter dict f))
+		)
+	)
+)
+
+
+(define filter-dict-iter
+	(lambda (dict pred)
+		(if (empty? dict)
+			dict
+
+			(if (pred (caar dict) (cadr dict))
+				(cons (car dict) (filter-dict-iter (cdr dict) pred))
+				(filter-dict-iter (cdr dict) pred)
+			)
 		)
 	)
 )
@@ -158,6 +186,9 @@
 
 (define filter-dict
 	(lambda (dict pred)
-		@TODO
+		(if (not (dict? dict))
+			(make-error "Error: not a dictionary")
+			(make-ok (filter-dict-iter dict pred))
+		)
 	)
 )
