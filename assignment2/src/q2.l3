@@ -82,15 +82,15 @@
 
 
 (define caar 
-	(lambda (pair)
-		(car (car pair))
+	(lambda (lst)
+		(car (car lst))
 	)
 )
 
 
 (define cadr 
-	(lambda (pair)
-		(cdr (car pair))
+	(lambda (lst)
+		(cdr (car lst))
 	)
 )
 
@@ -153,6 +153,7 @@
 					(caar dict) 
 					(f (cadr dict))
 				)
+				
 				(map-dict-iter (cdr dict) f)
 			)
 		)
