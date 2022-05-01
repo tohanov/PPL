@@ -1,0 +1,15 @@
+*
+
+!src
+!src/**
+
+!test
+!test/**
+
+!question1.pdf
+!question1.docx
+
+!.gitignore
+!package.json
+!tsconfig.json
+!zipCommands.sh
