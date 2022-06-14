@@ -1,0 +1,11 @@
+*
+
+!.gitignore
+
+!answers.docx
+!answers.pdf
+
+!part2
+!part3
+!part2/*
+!part3/*
